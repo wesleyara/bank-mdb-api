@@ -1,6 +1,9 @@
 import express from "express";
 const app = express();
 
+import swaggerUi from "swagger-ui-express";
+const swaggerDocument = require("./swagger.json");
+
 import cors from "cors";
 import dotenv from "dotenv";
 dotenv.config();
@@ -22,7 +25,9 @@ app.use(
 );
 app.use(express.json());
 app.use(express.static("public"));
+
 app.use("/api/v1", router);
+app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 connectToDatabase()
   .then(() => {
