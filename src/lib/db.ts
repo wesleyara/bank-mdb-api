@@ -1,13 +1,10 @@
 import mongoose from "mongoose";
+import { DATABASE_URL } from "../utils/constants";
 
-const uri = "mongodb://root:admin@localhost:27017";
 
 const connectToDatabase = async () => {
   try {
-    await mongoose.connect(uri, {
-      user: "root",
-      pass: "admin",
-    });
+    await mongoose.connect(DATABASE_URL);
     console.log("Conectado ao MongoDB");
   } catch (error) {
     console.error("Erro ao conectar ao MongoDB", error);
