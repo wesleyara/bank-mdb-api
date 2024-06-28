@@ -22,26 +22,21 @@ export class AccountService {
   }
 
   async createAccount({ owner, password }: CreateAccountProps) {
-    try {
-      const existingAccount = await this.accountRepository.findAccountByOwner(
-        owner,
-      );
+    const existingAccount =
+      await this.accountRepository.findAccountByOwner(owner);
 
-      if (existingAccount) {
-        throw new Error("Account already exists");
-      }
-
-      const passwordHash = generateHash(password, SECRET);
-
-      const account = new Account({
-        owner,
-        password: passwordHash,
-      });
-
-      await account.save();
-    } catch (error) {
-      console.log(error);
+    if (existingAccount) {
+      throw new Error("Account already exists");
     }
+
+    const passwordHash = generateHash(password, SECRET);
+
+    const account = new Account({
+      owner,
+      password: passwordHash,
+    });
+
+    await account.save();
   }
 
   async login({ owner, password }: CreateAccountProps) {
