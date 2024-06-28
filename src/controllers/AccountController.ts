@@ -11,14 +11,18 @@ export class AccountController {
     try {
       const { owner, password } = req.body;
 
+      if (!owner.trim() || !password.trim()) {
+        throw new Error("Owner or password not provided");
+      }
+
       await this.accountService.createAccount({
-        owner,
+        owner: owner.toLowerCase(),
         password,
       });
 
-      res.status(201).json({ message: "Account created" });
+      return res.status(201).json({ message: "Account created" });
     } catch (error: any) {
-      res.status(400).json({ error: error.message });
+      return res.status(400).json({ error: error.message });
     }
   }
 
@@ -26,7 +30,14 @@ export class AccountController {
     try {
       const { owner, password } = req.body;
 
-      const token = await this.accountService.login({ owner, password });
+      if (!owner.trim() || !password.trim()) {
+        throw new Error("Owner or password not provided");
+      }
+
+      const token = await this.accountService.login({
+        owner: owner.toLowerCase(),
+        password,
+      });
 
       res.status(200).json({ token });
     } catch (error: any) {
@@ -106,7 +117,7 @@ export class AccountController {
 
       const { to, amount } = req.body;
 
-      if (!to || !amount) {
+      if (!to.trim() || !amount) {
         throw new Error("To or amount not provided");
       }
 
